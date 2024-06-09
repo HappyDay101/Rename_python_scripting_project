@@ -12,11 +12,13 @@ def find_all_game_paths(source):
     for root, dirs, files in os.walk(source):
         for directory in dirs:
             if GAME_DIR_PATTERN in directory.lower():
-                pth = os.path.join(source, directory)
+                path = os.path.join(source, directory)
                 game_paths.append(path)
 
 
         break
+
+    return game_paths
 
 def main(source, target):
     # Get current working directory
@@ -24,11 +26,14 @@ def main(source, target):
     source_path = os.path.join(cwd, source)
     target_path = os.path.join(cwd, target)
 
+    game_paths = find_all_game_paths(source_path)
+    print(game_paths)
+
 if __name__ == "__main__":
     args = sys.argv
     print(args)
     if len(args) != 3:
         raise Exception("You must pass a source and target directory - only.")
 
-    source, target = sys.args[1:]
+    source, target = sys.argv[1:]
     main(source, target)
