@@ -67,6 +67,19 @@ def compile_game_code(path):
         return
 
     command = GAME_COMPILE_COMMAND + [code_file_name]
+    run_command(command, path)
+
+def run_command(command, path):
+    # get current working director
+    cwd = os.getcwd()
+    # change to new directory
+    os.chdir(path)
+
+    result = run(command, stdout=PIPE, stdin=PIPE, universal_newlines=True)
+    print("compile result", result)
+
+    # After command is finished go back to starting directory
+    os.chdir(cwd)
 
 def main(source, target):
     # Get current working directory
@@ -83,6 +96,7 @@ def main(source, target):
     for src, dest in zip(game_paths, new_game_dirs):
         dest_path = os.path.join(target_path, dest)
         copy_and_overwrite(src, dest_path)
+        compile_game_code(dest_path)
 
     json_path = os.path.join(target_path, "metadata.json")
     make_json_metadata_file(json_path, new_game_dirs)
